@@ -1,5 +1,6 @@
 package com.example.helloworld;
 
+import com.google.common.collect.ImmutableMap;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -19,7 +20,14 @@ public class HelloWorldApplication extends Application<HelloWorldConfiguration> 
 
     @Override
     public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
-        bootstrap.addBundle(new ViewBundle());
+        bootstrap.addBundle(new ViewBundle<HelloWorldConfiguration>() {
+            @Override
+            public ImmutableMap<String, ImmutableMap<String, String>> getViewConfiguration(HelloWorldConfiguration configuration) {
+                ImmutableMap.Builder<String, ImmutableMap<String, String>> builder = ImmutableMap.builder();
+                builder.put(".mustache", ImmutableMap.<String,String>of());
+                return builder.build();
+            }
+        });
     }
 
     @Override
